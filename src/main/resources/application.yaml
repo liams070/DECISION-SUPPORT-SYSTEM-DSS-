@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: decision_support_system
+  profiles:
+    active: mysql

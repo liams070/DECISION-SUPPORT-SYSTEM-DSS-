@@ -1,0 +1,44 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://${PGHOST}:${PGPORT}/${PGDATABASE}
+    username: ${PGUSER}
+    password: ${PGPASSWORD}
+    driver-class-name: org.postgresql.Driver
+
+  jackson:
+    time-zone: Africa/Lagos
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+      jdbc:
+        time_zone: Africa/Lagos
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+logging:
+  level:
+    root: DEBUG
+    org.springframework.web: DEBUG
+    org.hibernate: WARN
+    com.gallerywellnesshub: DEBUG
+
+jackson:
+  time-zone: Africa/Lagos
+
+servlet:
+  multipart:
+    max-file-size: 10MB
+    max-request-size: 10MB
+
+server:
+  port: ${PORT:8080}
+
+jwt:
+  secret: ${JWT_SECRET}
+
+sendgrid:
+  api-key: ${SENDGRID_API_KEY}
