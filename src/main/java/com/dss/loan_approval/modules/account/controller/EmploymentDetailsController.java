@@ -23,6 +23,11 @@ public class EmploymentDetailsController {
         return employmentDetailsService.getEmploymentDetails(id);
     }
 
+    @GetMapping("/getAllEmploymentDetails")
+    public BaseApiResponse getAllEmploymentDetails() {
+        return employmentDetailsService.getAllEmploymentDetails();
+    }
+
     @PutMapping("/{id}")
     public BaseApiResponse updateEmploymentDetails(@PathVariable Long id, @RequestBody EmploymentDetailsRequestDTO dto){
         return employmentDetailsService.updateEmploymentDetails(id, dto);

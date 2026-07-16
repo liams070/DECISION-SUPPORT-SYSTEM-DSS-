@@ -22,6 +22,11 @@ public class CustomerProfileController {
         return customerProfileService.getProfile(id);
     }
 
+    @GetMapping("/getAllProfile")
+    public BaseApiResponse getAllProfiles() {
+        return customerProfileService.getAllProfiles();
+    }
+
     @PutMapping("/{id}")
     public BaseApiResponse updateProfile(@PathVariable Long id, @RequestBody CustomerProfileRequestDTO dto){
         return customerProfileService.updateProfile(id, dto);

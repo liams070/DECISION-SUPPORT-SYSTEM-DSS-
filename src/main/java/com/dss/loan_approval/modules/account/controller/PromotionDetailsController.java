@@ -22,6 +22,11 @@ public class PromotionDetailsController {
         return promotionDetailsService.getPromotionDetails(id);
     }
 
+    @GetMapping("/getAllPromotionDetails")
+    public BaseApiResponse getAllPromotionDetails() {
+        return promotionDetailsService.getAllPromotionDetails();
+    }
+
     @PutMapping("/{id}")
     public BaseApiResponse updatePromotionDetails(@PathVariable Long id, @RequestBody PromotionDetailsRequestDTO dto){
         return promotionDetailsService.updatePromotionDetails(id, dto);

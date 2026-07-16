@@ -9,6 +9,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import static com.dss.loan_approval.config.util.AppCodeConstants.*;
 import static com.dss.loan_approval.config.util.AppTextConstants.*;
 
@@ -59,6 +62,30 @@ public class PromotionDetailsService {
             return new BaseApiResponse<>(SERVER_ERROR_CODE, SERVER_ERROR_MSG, FAILED_TO_FETCH_PROMOTION_DETAILS, null);
         }
     }
+
+    public BaseApiResponse<List<PromotionDetailsResponseDTO>> getAllPromotionDetails() {
+        try {
+            List<PromotionDetailsResponseDTO> detailsList = promotionDetailsRepository.findAll()
+                    .stream()
+                    .map(details -> PromotionDetailsResponseDTO.builder()
+                            .id(details.getId())
+                            .ministry(details.getMinistry())
+                            .state(details.getState())
+                            .lastPromotionDate(details.getLastPromotionDate())
+                            .promotionLetterUrl(details.getPromotionLetterUrl())
+                            .payslipUrls(details.getPayslipUrls())
+                            .build())
+                    .collect(Collectors.toList());
+
+            return new BaseApiResponse<>(SUCCESS_CODE, SUCCESS_MSG, PROMOTION_DETAILS_FETCHED_SUCCESSFULLY, detailsList);
+
+        } catch (Exception e) {
+            log.error(ERROR_FETCHING_PROMOTION_DETAILS, e);
+            return new BaseApiResponse<>(SERVER_ERROR_CODE, SERVER_ERROR_MSG, FAILED_TO_FETCH_PROMOTION_DETAILS, null
+            );
+        }
+    }
+
 
     public BaseApiResponse <Void> updatePromotionDetails(Long id, PromotionDetailsRequestDTO dto) {
         try {

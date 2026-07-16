@@ -58,6 +58,37 @@ public class EmploymentDetailsService {
         }
     }
 
+    public BaseApiResponse<List<EmploymentDetailsResponseDTO>> getAllEmploymentDetails() {
+        try {
+            List<EmploymentDetailsResponseDTO> detailsList = employmentDetailsRepository.findAll()
+                    .stream()
+                    .map(details -> EmploymentDetailsResponseDTO.builder()
+                            .id(details.getId())
+                            .officeName(details.getOfficeName())
+                            .officeAddress(details.getOfficeAddressEmployment())
+                            .yearOfEmployment(details.getYearOfEmployment())
+                            .employmentLetterUrl(details.getEmploymentLetterUrl())
+                            .build())
+                    .collect(Collectors.toList());
+
+            return new BaseApiResponse<>(
+                    SUCCESS_CODE,
+                    SUCCESS_MSG,
+                    EMPLOYMENT_DETAILS_FETCHED_SUCCESSFULLY,
+                    detailsList
+            );
+
+        } catch (Exception e) {
+            log.error(ERROR_FETCHING_EMPLOYMENT_DETAILS, e);
+            return new BaseApiResponse<>(
+                    SERVER_ERROR_CODE,
+                    SERVER_ERROR_MSG,
+                    FAILED_TO_FETCH_EMPLOYMENT_DETAILS,
+                    null
+            );
+        }
+    }
+
     public BaseApiResponse<Void> updateEmploymentDetails(Long id, EmploymentDetailsRequestDTO dto) {
         try {
             EmploymentDetails details = employmentDetailsRepository.findById(id)

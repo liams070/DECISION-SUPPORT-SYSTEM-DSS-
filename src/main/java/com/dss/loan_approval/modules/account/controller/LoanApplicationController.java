@@ -23,6 +23,11 @@ public class LoanApplicationController {
         return loanApplicationService.getLoanApplication(id);
     }
 
+    @GetMapping("/getAllLoanApplications")
+    public BaseApiResponse getAllLoanApplications() {
+        return loanApplicationService.getAllLoanApplications();
+    }
+
     @PutMapping("/{id}")
     public BaseApiResponse updateLoanApplication(@PathVariable Long id, LoanApplicationRequestDTO dto){
         return loanApplicationService.updateLoanApplication(id, dto);

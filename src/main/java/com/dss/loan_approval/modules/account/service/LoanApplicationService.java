@@ -9,6 +9,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import static com.dss.loan_approval.config.util.AppCodeConstants.*;
 import static com.dss.loan_approval.config.util.AppTextConstants.*;
 
@@ -62,6 +65,31 @@ public class LoanApplicationService {
             return new BaseApiResponse<>(SERVER_ERROR_CODE, SERVER_ERROR_MSG, FAILED_TO_FETCH_LOAN_DETAILS, null);
         }
     }
+
+    public BaseApiResponse<List<LoanApplicationResponseDTO>> getAllLoanApplications() {
+        try {
+            List<LoanApplicationResponseDTO> applications = loanApplicationRepository.findAll()
+                    .stream()
+                    .map(application -> LoanApplicationResponseDTO.builder()
+                            .id(application.getId())
+                            .runningLoan(application.getRunningLoan())
+                            .currentLoanBalance(application.getCurrentLoanBalance())
+                            .newRequest(application.getNewRequest())
+                            .tenor(application.getTenor())
+                            .monthlyNet(application.getMonthlyNet())
+                            .monthlyGross(application.getMonthlyGross())
+                            .passportPhotoUrl(application.getPassportPhotoUrl())
+                            .build())
+                    .collect(Collectors.toList());
+
+            return new BaseApiResponse<>(SUCCESS_CODE, SUCCESS_MSG, LOAN_DETAILS_FETCHED_SUCCESSFULLY, applications);
+
+        } catch (Exception e) {
+            log.error(ERROR_FETCHING_LOAN_DETAILS, e);
+            return new BaseApiResponse<>(SERVER_ERROR_CODE, SERVER_ERROR_MSG, FAILED_TO_FETCH_LOAN_DETAILS, null);
+        }
+    }
+
 
     public BaseApiResponse<Void> updateLoanApplication(Long id, LoanApplicationRequestDTO dto) {
         try {

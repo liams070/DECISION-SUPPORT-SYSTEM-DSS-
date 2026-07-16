@@ -47,6 +47,9 @@ public class AppTextConstants {
     public static final String PROMOTION_DETAILS_UPDATED_SUCCESSFULLY = "Promotion details updated successfully";
     public static final String ERROR_UPDATING_PROMOTION_DETAILS = "Error updating promotion detials";
     public static final String FAILED_TO_UPDATE_PROMOTION_DETAILS = "Failed to update promotion details";
+    public static final String ALL_PROFILE_RETRIVED_SUCCESSFULLY = "All profiles retrieved successfully";
+    public static final String ERROR_FETCHING_ALL_PROFILE = "Error fetching all profiles";
+    public static final String FAILED_TO_FETCH_ALL_PROFILE = "Failed to fetch profiles";
 
 }
 

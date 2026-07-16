@@ -9,6 +9,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import static com.dss.loan_approval.config.util.AppCodeConstants.*;
 import static com.dss.loan_approval.config.util.AppTextConstants.*;
 
@@ -81,6 +84,40 @@ public class CustomerProfileService {
         }
 
     }
+
+    public BaseApiResponse<List<CustomerProfileResponseDTO>> getAllProfiles() {
+        try {
+            List<CustomerProfileResponseDTO> profiles = customerProfileRepository.findAll()
+                    .stream()
+                    .map(profile -> CustomerProfileResponseDTO.builder()
+                            .id(profile.getId())
+                            .surname(profile.getSurname())
+                            .firstName(profile.getFirstName())
+                            .otherName(profile.getOtherName())
+                            .bvn(profile.getBvn())
+                            .ippisNumber(profile.getIppisNumber())
+                            .phoneNumber(profile.getPhoneNumber())
+                            .stateOfOrigin(profile.getStateOfOrigin())
+                            .lga(profile.getLga())
+                            .town(profile.getTown())
+                            .officeAddress(profile.getOfficeAddress())
+                            .residentialAddress(profile.getResidentialAddress())
+                            .landmark(profile.getLandmark())
+                            .dob(profile.getDob())
+                            .nin(profile.getNin())
+                            .idType(profile.getIdType())
+                            .passportPhotoUrl(profile.getPassportPhotoUrl())
+                            .build())
+                    .collect(Collectors.toList());
+
+            return new BaseApiResponse<>(SUCCESS_CODE, SUCCESS_MSG, ALL_PROFILE_RETRIVED_SUCCESSFULLY, profiles);
+
+        } catch (Exception e) {
+            log.error(ERROR_FETCHING_ALL_PROFILE, e);
+            return new BaseApiResponse<>(SERVER_ERROR_CODE, SERVER_ERROR_MSG, FAILED_TO_FETCH_ALL_PROFILE, null);
+        }
+    }
+
 
     public BaseApiResponse <Void> updateProfile(Long id, CustomerProfileRequestDTO dto) {
         try {
