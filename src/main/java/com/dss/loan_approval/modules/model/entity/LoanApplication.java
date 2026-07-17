@@ -1,6 +1,5 @@
 package com.dss.loan_approval.modules.model.entity;
 
-import com.dss.loan_approval.config.enums.ApplicationStatus;
 import jakarta.persistence.*;
 import lombok.*;
 

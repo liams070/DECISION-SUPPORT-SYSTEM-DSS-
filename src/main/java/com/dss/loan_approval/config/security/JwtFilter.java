@@ -4,10 +4,14 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.List;
 
 @Component
 public class JwtFilter extends OncePerRequestFilter {
@@ -25,7 +29,8 @@ public class JwtFilter extends OncePerRequestFilter {
                 || path.startsWith("/api/v1/customer-profile")
                 || path.startsWith("/api/v1/employment-details")
                 || path.startsWith("/api/v1/promotion-details")
-                || path.startsWith("/api/v1/loan-application");
+                || path.startsWith("/api/v1/loan-application")
+                || path.startsWith("/api/v1/compliance");
     }
 
 
@@ -35,13 +40,23 @@ public class JwtFilter extends OncePerRequestFilter {
                                     FilterChain filterChain) throws ServletException, IOException {
 
         final String authHeader = request.getHeader("Authorization");
-        String username = null;
-        String jwt = null;
 
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
-            jwt = authHeader.substring(7);
+            String jwt = authHeader.substring(7);
             try {
-                username = jwtUtil.extractUsername(jwt);
+                if (jwtUtil.validateToken(jwt)) {
+                    String username = jwtUtil.extractUsername(jwt);
+                    String role = jwtUtil.extractRole(jwt);
+
+                    UsernamePasswordAuthenticationToken authentication =
+                            new UsernamePasswordAuthenticationToken(
+                                    username,
+                                    null,
+                                    List.of(new SimpleGrantedAuthority("ROLE_" + role))
+                            );
+
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                }
             } catch (io.jsonwebtoken.ExpiredJwtException e) {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 response.setContentType("application/json");
@@ -52,4 +67,5 @@ public class JwtFilter extends OncePerRequestFilter {
 
         filterChain.doFilter(request, response);
     }
+
 }

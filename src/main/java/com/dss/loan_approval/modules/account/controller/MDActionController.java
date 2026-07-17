@@ -1,0 +1,30 @@
+package com.dss.loan_approval.modules.account.controller;
+
+import com.dss.loan_approval.config.util.BaseApiResponse;
+import com.dss.loan_approval.modules.account.dto.response.OfficerRegistrationResponseDTO;
+import com.dss.loan_approval.modules.account.service.ManagementService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequiredArgsConstructor
+@RequestMapping("/api/v1/md")
+public class MDActionController {
+
+    private final ManagementService managementService;
+
+    @PreAuthorize("hasRole('MANAGING_DIRECTOR')")
+    @PostMapping("/approve-officer/{id}")
+    public BaseApiResponse<?> approveOfficer(@PathVariable Long id) {
+        return managementService.approveOfficer(id);
+    }
+
+    @PreAuthorize("hasRole('MANAGING_DIRECTOR')")
+    @GetMapping("/pending-officer")
+    public BaseApiResponse<List<OfficerRegistrationResponseDTO>> getPendingOfficers() {
+        return managementService.getPendingOfficers();
+    }
+}

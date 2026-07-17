@@ -17,6 +17,6 @@ public class ApiPathConfig {
     };
 
     public static final String[] OPEN_AUTH_PATHS = {
-//            "/api/v1/auth/**"
+            "/api/v1/auth/**"
     };
   };

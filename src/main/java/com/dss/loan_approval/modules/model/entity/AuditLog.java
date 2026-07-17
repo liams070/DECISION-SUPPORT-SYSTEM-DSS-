@@ -1,11 +1,8 @@
 package com.dss.loan_approval.modules.model.entity;
 
-import com.dss.loan_approval.config.enums.ActionType;
+import com.dss.loan_approval.config.enums.LogAction;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
@@ -14,26 +11,21 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Getter
 @Setter
+@Builder
 public class AuditLog {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    private User user;
-
     @Enumerated(EnumType.STRING)
-    private ActionType actionType;
+    private LogAction action;
 
-    @Column(columnDefinition = "TEXT")
-    private String beforeValue;
-
-    @Column(columnDefinition = "TEXT")
-    private String afterValue;
-
+    private String performedBy;
+    private String targetId;
+    private String beforeState;
+    private String afterState;
     private String ipAddress;
-    private String browser;
-    private String location;
-
+    private String browserType;
     private LocalDateTime timestamp;
+    private String details;
 }

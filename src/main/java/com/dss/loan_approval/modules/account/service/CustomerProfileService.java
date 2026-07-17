@@ -1,5 +1,6 @@
 package com.dss.loan_approval.modules.account.service;
 
+import com.dss.loan_approval.config.enums.CustomerStatus;
 import com.dss.loan_approval.config.util.BaseApiResponse;
 import com.dss.loan_approval.modules.account.dto.request.CustomerProfileRequestDTO;
 import com.dss.loan_approval.modules.account.dto.response.CustomerProfileResponseDTO;
@@ -9,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,7 +23,7 @@ import static com.dss.loan_approval.config.util.AppTextConstants.*;
 public class CustomerProfileService {
     private final CustomerProfileRepository customerProfileRepository;
 
-    public BaseApiResponse <Void> saveProfile(CustomerProfileRequestDTO dto) {
+    public BaseApiResponse<Void> saveProfile(CustomerProfileRequestDTO dto) {
         try {
             CustomerProfile profile = CustomerProfile.builder()
                     .surname(dto.getSurname())
@@ -36,13 +38,15 @@ public class CustomerProfileService {
                     .officeAddress(dto.getOfficeAddress())
                     .residentialAddress(dto.getResidentialAddress())
                     .landmark(dto.getLandmark())
-                    .dob(dto.getDob())
+                    .dob(LocalDate.parse(dto.getDob()))
                     .nin(dto.getNin())
                     .idType(dto.getIdType())
                     .passportPhotoUrl(dto.getPassportPhotoUrl())
+                    .status(CustomerStatus.NEW)
                     .build();
 
             customerProfileRepository.save(profile);
+
             return new BaseApiResponse<>(SUCCESS_CODE, SUCCESS_MSG, PROFILE_SUBMITTED_SUCCESSFULLY, null);
 
         } catch (Exception e) {
@@ -50,6 +54,7 @@ public class CustomerProfileService {
             return new BaseApiResponse<>(SERVER_ERROR_CODE, SERVER_ERROR_MSG, FAILED_TO_SUBMIT_PROFILE, null);
         }
     }
+
 
     public BaseApiResponse <CustomerProfileResponseDTO> getProfile(Long id) {
         try {
@@ -70,7 +75,7 @@ public class CustomerProfileService {
                     .officeAddress(profile.getOfficeAddress())
                     .residentialAddress(profile.getResidentialAddress())
                     .landmark(profile.getLandmark())
-                    .dob(profile.getDob())
+                    .dob(profile.getDob().toString())
                     .nin(profile.getNin())
                     .idType(profile.getIdType())
                     .passportPhotoUrl(profile.getPassportPhotoUrl())
@@ -103,7 +108,7 @@ public class CustomerProfileService {
                             .officeAddress(profile.getOfficeAddress())
                             .residentialAddress(profile.getResidentialAddress())
                             .landmark(profile.getLandmark())
-                            .dob(profile.getDob())
+                            .dob(profile.getDob().toString())
                             .nin(profile.getNin())
                             .idType(profile.getIdType())
                             .passportPhotoUrl(profile.getPassportPhotoUrl())
@@ -136,7 +141,7 @@ public class CustomerProfileService {
             profile.setOfficeAddress(dto.getOfficeAddress());
             profile.setResidentialAddress(dto.getResidentialAddress());
             profile.setLandmark(dto.getLandmark());
-            profile.setDob(dto.getDob());
+            profile.setDob(LocalDate.parse(dto.getDob()));
             profile.setNin(dto.getNin());
             profile.setIdType(dto.getIdType());
             profile.setPassportPhotoUrl(dto.getPassportPhotoUrl());

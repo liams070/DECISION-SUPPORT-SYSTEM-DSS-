@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -15,5 +17,6 @@ public class PromotionDetailsResponseDTO {
     private String state;
     private String lastPromotionDate;
     private String promotionLetterUrl;
-    private String payslipUrls;
+
+    private List<String> payslipUrls;
 }
