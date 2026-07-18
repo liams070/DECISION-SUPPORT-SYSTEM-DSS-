@@ -118,7 +118,14 @@ public class AppTextConstants {
     public static final String ERROR_LOGGING_IN = "Error logging in officer";
     public static final String FAILED_TO_LOGIN = "Failed to login officer";
 
+    public static final String MD_REGISTERATION_SUCCESSFUL = "MD registered successfully";
+    public static final String MD_ALREADY_REGISTERED = "Managing Director already registered";
+    public static final String CREDIT_ADMIN_COMMENT_SUBMITTED_SUCCESSFULLY = "Credit Admin comment submitted successfully";
 
+    public static final String FAILED_TO_SUBMIT_CREDIT_ADMIN_COMMENT = "Failed to submit Credit Admin comment";
+    public static final String ERROR_SAVING_CREDIT_ADMIN_COMMENT = "Error saving Credit Admin comment";
+    public static final String CREDIT_ADMIN_COMMENTS_FETCHED_SUCCESSFULLY = "Credit Admin comments fetched successfully";
+    public static final String FAILED_TO_FETCH_CREDIT_ADMIN_COMMENTS = "Failed to fetch Credit Admin comments";
 
 }
 

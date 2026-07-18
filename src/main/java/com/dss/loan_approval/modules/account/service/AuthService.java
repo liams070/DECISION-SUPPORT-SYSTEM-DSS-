@@ -33,16 +33,42 @@ public class AuthService {
     public BaseApiResponse<OfficerRegistrationResponseDTO> registerOfficer(OfficerRegistrationRequestDTO dto) {
         try {
             if (officerRepository.existsByEmail(dto.getEmail())) {
-                return new BaseApiResponse<>(CONFLICT_CODE, CONFLICT_MSG, EMAIL_ALREADY_EXISTS,
-                        null
-                );
+                return new BaseApiResponse<>(CONFLICT_CODE, CONFLICT_MSG, EMAIL_ALREADY_EXISTS, null);
             }
 
             if (dto.getRole() == OfficerRole.MANAGING_DIRECTOR) {
-                return new BaseApiResponse<>(UNAUTHORIZED_CODE, UNAUTHORIZED_MSG, MD_CANNOT_SELF_REGISTER,
-                        null
-                );
+                boolean mdExists = officerRepository.existsByRole(OfficerRole.MANAGING_DIRECTOR);
+                if (mdExists) {
+                    return new BaseApiResponse<>(CONFLICT_CODE, CONFLICT_MSG, MD_ALREADY_REGISTERED, null);
+                }
+
+                String hashedPassword = passwordEncoder.encode(dto.getPassword());
+
+                OfficerRegistration md = OfficerRegistration.builder()
+                        .fullName(dto.getFullName())
+                        .email(dto.getEmail())
+                        .phoneNumber(dto.getPhoneNumber())
+                        .gender(dto.getGender())
+                        .password(hashedPassword)
+                        .role(OfficerRole.MANAGING_DIRECTOR)
+                        .status(OfficerVerificationStatus.VERIFIED)
+                        .build();
+
+                OfficerRegistration saved = officerRepository.save(md);
+
+                OfficerRegistrationResponseDTO response = OfficerRegistrationResponseDTO.builder()
+                        .id(saved.getId())
+                        .fullName(saved.getFullName())
+                        .email(saved.getEmail())
+                        .phoneNumber(saved.getPhoneNumber())
+                        .gender(saved.getGender())
+                        .role(saved.getRole())
+                        .status(saved.getStatus())
+                        .build();
+
+                return new BaseApiResponse<>(SUCCESS_CODE, SUCCESS_MSG, MD_REGISTERATION_SUCCESSFUL , response);
             }
+
             String hashedPassword = passwordEncoder.encode(dto.getPassword());
 
             OfficerRegistration officer = OfficerRegistration.builder()
@@ -67,11 +93,11 @@ public class AuthService {
                     .status(saved.getStatus())
                     .build();
 
-            return new BaseApiResponse<>(SUCCESS_CODE, SUCCESS_MSG,REGISTRATION_SUCCESSFUL, response);
+            return new BaseApiResponse<>(SUCCESS_CODE, SUCCESS_MSG, REGISTRATION_SUCCESSFUL, response);
 
         } catch (Exception e) {
             log.error(ERROR_REGISTERING_OFFICER, e);
-            return new BaseApiResponse<>(SERVER_ERROR_CODE,SERVER_ERROR_MSG,FAILED_TO_REGISTER_OFFICER, null);
+            return new BaseApiResponse<>(SERVER_ERROR_CODE, SERVER_ERROR_MSG, FAILED_TO_REGISTER_OFFICER, null);
         }
     }
 
