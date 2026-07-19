@@ -28,13 +28,8 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .cors(cors -> {})
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/v1/loan-application/**").permitAll()
-                        .requestMatchers("/api/v1/customer-profile/**").permitAll()
-                        .requestMatchers("/api/v1/employment-details/**").permitAll()
-                        .requestMatchers("/api/v1/promotion-details/**").permitAll()
-
-                        .requestMatchers("/api/v1/auth/**").permitAll()
-
+                        .requestMatchers(ApiPathConfig.OPEN_GENERAL_PATHS).permitAll()
+                        .requestMatchers(ApiPathConfig.OPEN_AUTH_PATHS).permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
@@ -52,8 +47,10 @@ public class SecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(Arrays.asList(
                 "https://goldvatechnologies.com",
+                "https://www.goldvatechnologies.com",
                 "https://decision-support-system-dss-production.up.railway.app",
-                "http://localhost:3000"
+                "http://localhost:3000",
+                "http://localhost"
         ));
 
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
