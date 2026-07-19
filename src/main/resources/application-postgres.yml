@@ -8,7 +8,7 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
-    show-sql: true
+    show-sql: false
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
@@ -21,9 +21,10 @@ spring:
 
 logging:
   level:
-    root: DEBUG
-    org.springframework.web: DEBUG
+    root: INFO
+    org.springframework.web: INFO
     org.hibernate: WARN
+    com.dss.loan_approval: INFO
 
 server:
   port: ${PORT:8080}
@@ -32,3 +33,14 @@ servlet:
   multipart:
     max-file-size: 10MB
     max-request-size: 10MB
+
+jwt:
+  secret: ${JWT_SECRET}
+
+app:
+  super:
+    password: ${APP_SUPER_PASSWORD}
+  cloudinary:
+    cloud-name: ${CLOUDINARY_CLOUD_NAME}
+    api-key: ${CLOUDINARY_API_KEY}
+    api-secret: ${CLOUDINARY_API_SECRET}
