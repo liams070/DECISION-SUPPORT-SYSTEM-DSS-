@@ -29,10 +29,8 @@ public class JwtFilter extends OncePerRequestFilter {
                 || path.startsWith("/api/v1/customer-profile")
                 || path.startsWith("/api/v1/employment-details")
                 || path.startsWith("/api/v1/promotion-details")
-                || path.startsWith("/api/v1/loan-application")
-                || path.startsWith("/api/v1/compliance");
+                || path.startsWith("/api/v1/loan-application");
     }
-
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
@@ -67,5 +65,4 @@ public class JwtFilter extends OncePerRequestFilter {
 
         filterChain.doFilter(request, response);
     }
-
 }

@@ -10,6 +10,7 @@ public class ApiPathConfig {
             "/swagger-ui/**",
             "/v3/api-docs/**",
 
+            // Customer submission endpoints
             "/api/v1/customer-profile/**",
             "/api/v1/employment-details/**",
             "/api/v1/promotion-details/**",
@@ -19,4 +20,4 @@ public class ApiPathConfig {
     public static final String[] OPEN_AUTH_PATHS = {
             "/api/v1/auth/**"
     };
-  };
+}
