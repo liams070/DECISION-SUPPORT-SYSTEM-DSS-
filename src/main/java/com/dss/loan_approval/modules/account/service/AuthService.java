@@ -1,5 +1,6 @@
 package com.dss.loan_approval.modules.account.service;
 
+import java.security.SecureRandom;
 import com.dss.loan_approval.config.enums.LogAction;
 import com.dss.loan_approval.config.enums.OfficerRole;
 import com.dss.loan_approval.config.enums.OfficerVerificationStatus;
@@ -54,19 +55,21 @@ public class AuthService {
                         .status(OfficerVerificationStatus.VERIFIED)
                         .build();
 
-                OfficerRegistration saved = officerRepository.save(md);
+                OfficerRegistration savedMd = officerRepository.save(md);
 
                 OfficerRegistrationResponseDTO response = OfficerRegistrationResponseDTO.builder()
-                        .id(saved.getId())
-                        .fullName(saved.getFullName())
-                        .email(saved.getEmail())
-                        .phoneNumber(saved.getPhoneNumber())
-                        .gender(saved.getGender())
-                        .role(saved.getRole())
-                        .status(saved.getStatus())
+                        .id(savedMd.getId())
+                        .fullName(savedMd.getFullName())
+                        .email(savedMd.getEmail())
+                        .phoneNumber(savedMd.getPhoneNumber())
+                        .gender(savedMd.getGender())
+                        .role(savedMd.getRole())
+                        .status(savedMd.getStatus())
                         .build();
 
-                return new BaseApiResponse<>(SUCCESS_CODE, SUCCESS_MSG, MD_REGISTERATION_SUCCESSFUL , response);
+                auditService.logAction(LogAction.REGISTER, savedMd.getEmail(), MD_REGISTERED_SUCCESSFULLY);
+
+                return new BaseApiResponse<>(SUCCESS_CODE, SUCCESS_MSG, MD_REGISTERATION_SUCCESSFUL, response);
             }
 
             String hashedPassword = passwordEncoder.encode(dto.getPassword());
@@ -81,17 +84,19 @@ public class AuthService {
                     .status(OfficerVerificationStatus.PENDING_VERIFICATION)
                     .build();
 
-            OfficerRegistration saved = officerRepository.save(officer);
+            OfficerRegistration savedOfficer = officerRepository.save(officer);
 
             OfficerRegistrationResponseDTO response = OfficerRegistrationResponseDTO.builder()
-                    .id(saved.getId())
-                    .fullName(saved.getFullName())
-                    .email(saved.getEmail())
-                    .phoneNumber(saved.getPhoneNumber())
-                    .gender(saved.getGender())
-                    .role(saved.getRole())
-                    .status(saved.getStatus())
+                    .id(savedOfficer.getId())
+                    .fullName(savedOfficer.getFullName())
+                    .email(savedOfficer.getEmail())
+                    .phoneNumber(savedOfficer.getPhoneNumber())
+                    .gender(savedOfficer.getGender())
+                    .role(savedOfficer.getRole())
+                    .status(savedOfficer.getStatus())
                     .build();
+
+            auditService.logAction(LogAction.REGISTER, savedOfficer.getEmail(), OFFICER_REGISTERED_SUCCESSFULLY);
 
             return new BaseApiResponse<>(SUCCESS_CODE, SUCCESS_MSG, REGISTRATION_SUCCESSFUL, response);
 
@@ -101,19 +106,18 @@ public class AuthService {
         }
     }
 
+
     public BaseApiResponse<LoginResponseDTO> loginOfficer(String email, String password) {
         try {
             OfficerRegistration officer = officerRepository.findByEmail(email)
                     .orElseThrow(() -> new RuntimeException(OFFICER_NOT_FOUND));
 
             if (officer.getStatus() != OfficerVerificationStatus.VERIFIED) {
-                return new BaseApiResponse<>(UNAUTHORIZED_CODE, UNAUTHORIZED_MSG,
-                        OFFICER_NOT_VERIFIED, null);
+                return new BaseApiResponse<>(UNAUTHORIZED_CODE, UNAUTHORIZED_MSG, OFFICER_NOT_VERIFIED, null);
             }
 
             if (!passwordEncoder.matches(password, officer.getPassword())) {
-                return new BaseApiResponse<>(UNAUTHORIZED_CODE, UNAUTHORIZED_MSG,
-                        INVALID_CREDENTIALS, null);
+                return new BaseApiResponse<>(UNAUTHORIZED_CODE, UNAUTHORIZED_MSG, INVALID_CREDENTIALS, null);
             }
 
             String token = jwtUtil.generateToken(officer.getEmail(), officer.getRole().name());
@@ -140,4 +144,51 @@ public class AuthService {
 
         return new BaseApiResponse<>(SUCCESS_CODE, SUCCESS_MSG, LOGOUT_SUCCESSFULLY, null);
     }
+
+
+    public BaseApiResponse<String> forgotPassword(String email) {
+        try {
+            OfficerRegistration officer = officerRepository.findByEmail(email)
+                    .orElseThrow(() -> new RuntimeException(OFFICER_NOT_FOUND));
+
+            SecureRandom random = new SecureRandom();
+            int resetCode = 100000 + random.nextInt(900000);
+
+            officer.setResetCode(String.valueOf(resetCode));
+            officerRepository.save(officer);
+
+            log.info("Generated reset code for {}: {}", email, resetCode);
+
+            return new BaseApiResponse<>(SUCCESS_CODE, SUCCESS_MSG, RESET_CODE_GENERATED_SUCCESSFULLY, RESET_CODE_SENT_TO_EMAIL);
+        } catch (Exception e) {
+            log.error(ERROR_GENERATING_RESET_CODE, e);
+            return new BaseApiResponse<>(SERVER_ERROR_CODE, SERVER_ERROR_MSG, FAILED_TO_GENERATE_RESET_CODE, null);
+        }
+    }
+
+    public BaseApiResponse<String> resetPassword(String email, String resetCode, String newPassword) {
+        try {
+            OfficerRegistration officer = officerRepository.findByEmail(email)
+                    .orElseThrow(() -> new RuntimeException(OFFICER_NOT_FOUND));
+
+            if (!resetCode.equals(officer.getResetCode())) {
+
+                auditService.logAction(LogAction.RESET_PASSWORD, email, INVALID_RESET_CODE);
+
+                return new BaseApiResponse<>(UNAUTHORIZED_CODE, UNAUTHORIZED_MSG, INVALID_RESET_CODE, null);
+            }
+
+            officer.setPassword(passwordEncoder.encode(newPassword));
+            officer.setResetCode(null);
+            officerRepository.save(officer);
+
+            auditService.logAction(LogAction.RESET_PASSWORD, officer.getEmail(), PASSWORD_RESET_SUCCESSFULLY);
+
+            return new BaseApiResponse<>(SUCCESS_CODE, SUCCESS_MSG, PASSWORD_RESET_SUCCESSFULLY, PASSWORD_UPDATED_SUCCESSFULLY);
+        } catch (Exception e) {
+            log.error(ERROR_RESETTING_PASSWORD, e);
+            return new BaseApiResponse<>(SERVER_ERROR_CODE, SERVER_ERROR_MSG, FAILED_TO_RESET_PASSWORD, null);
+        }
+    }
+
 }

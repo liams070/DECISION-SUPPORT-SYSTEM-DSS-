@@ -32,4 +32,6 @@ public class OfficerRegistration {
     private OfficerVerificationStatus status;
 
 //    private boolean emailVerified;
+
+    private String resetCode;
 }

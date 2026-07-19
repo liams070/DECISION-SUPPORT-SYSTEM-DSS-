@@ -29,4 +29,13 @@ public class AuthController {
         return authService.logoutOfficer(email);
     }
 
+    @PostMapping("/forgot-password")
+    public BaseApiResponse<String> forgotPassword(@RequestParam String email) {
+        return authService.forgotPassword(email);
+    }
+
+    @PostMapping("/reset-password")
+    public BaseApiResponse<String> resetPassword(@RequestParam String email, @RequestParam String resetCode, @RequestParam String newPassword) {
+        return authService.resetPassword(email, resetCode, newPassword);
+    }
 }

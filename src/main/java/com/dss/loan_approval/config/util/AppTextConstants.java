@@ -1,5 +1,7 @@
 package com.dss.loan_approval.config.util;
 
+import org.springframework.security.core.parameters.P;
+
 public class AppTextConstants {
     private AppTextConstants() {
     }
@@ -103,8 +105,8 @@ public class AppTextConstants {
     public static final String ERROR_DECLINING_MD = "Error declining customer profile at MD desk";
 
     public static final String EMAIL_ALREADY_EXISTS = "Email already exists";
-    public static final String MD_CANNOT_SELF_REGISTER = "Managing Director cannot self-register";
     public static final String LOGOUT_SUCCESSFULLY = "User logged out";
+    public static final String FAILED_TO_UPDATE_OFFICER = "Failed to update officer profile";
 
     public static final String REGISTRATION_SUCCESSFUL = "Officer registered successfully";
     public static final String ERROR_REGISTERING_OFFICER = "Error registering officer";
@@ -120,12 +122,54 @@ public class AppTextConstants {
 
     public static final String MD_REGISTERATION_SUCCESSFUL = "MD registered successfully";
     public static final String MD_ALREADY_REGISTERED = "Managing Director already registered";
-    public static final String CREDIT_ADMIN_COMMENT_SUBMITTED_SUCCESSFULLY = "Credit Admin comment submitted successfully";
+    public static final String OFFICER_PROFILE_UPDATED_SUCCESSFULLY = "Officer profile updated successfully";
 
     public static final String FAILED_TO_SUBMIT_CREDIT_ADMIN_COMMENT = "Failed to submit Credit Admin comment";
     public static final String ERROR_SAVING_CREDIT_ADMIN_COMMENT = "Error saving Credit Admin comment";
     public static final String CREDIT_ADMIN_COMMENTS_FETCHED_SUCCESSFULLY = "Credit Admin comments fetched successfully";
+
     public static final String FAILED_TO_FETCH_CREDIT_ADMIN_COMMENTS = "Failed to fetch Credit Admin comments";
+    public static final String OFFICER_FETCHED_SUCCESSFULLY = "Officers fetched successfully";
+    public static final String ERROR_FETCHING_OFFICERS = "Error fetching officers";
+
+    public static final String FAILED_TO_FETCHED_OFFICER = "Failed to fetch officers";
+    public static final String ERROR_FETCHING_OFFICERBYID = "Error fetching officer by id";
+    public static final String OFFICER_NOTFOUND = "Officer not found";
+
+    public static final String OFFICER_APPROVED_SUCCESSFULLY = "Officer approved successfully";
+    public static final String PENDING_OFFICER_RETRIEVED = "Pending officer retrieved";
+    public static final String ERROR_FETCHING_UPDATE_OFFICERS = "Error updating officer profile";
+
+    public static final String OFFICERS_FETCHED_SUCCESSFULLY = "All officers fetched successfully";
+    public static final String STAFF_ENABLED_SUCCESSFULLY = "Staff account enabled successfully";
+    public static final String FAILED_TO_ENABLE_OFFICER = "Failed to enable staff account";
+
+    public static final String ERROR_ENABLING_OFFICER = "Error enabling staff account";
+    public static final String STAFF_DISABLED_SUCCESSFULLY = "Staff account disabled successfully";
+    public static final String FAILED_TO_DISABLE_OFFICER = "Failed to disable staff account";
+
+    public static final String ERROR_DISABLING_OFFICER = "Error disabling staff account";
+    public static final String STAFF_DELETED_SUCCESSFULLY = "Staff account deleted successfully";
+    public static final String FAILED_TO_DELETE_OFFICER = "Failed to delete staff account";
+
+    public static final String RESET_CODE_GENERATED_SUCCESSFULLY = "Reset code generated successfully";
+    public static final String FAILED_TO_GENERATE_RESET_CODE = "Failed to generate reset code";
+    public static final String ERROR_GENERATING_RESET_CODE = "Error generating reset code";
+
+    public static final String INVALID_RESET_CODE = "Invalid reset code";
+    public static final String PASSWORD_RESET_SUCCESSFULLY = "Password reset successfully";
+    public static final String FAILED_TO_RESET_PASSWORD = "Failed to reset password";
+
+    public static final String ERROR_RESETTING_PASSWORD = "Error resetting password";
+    public static final String ERROR_DELETING_OFFICER = "Error deleting staff account";
+    public static final String RESET_CODE_SENT_TO_EMAIL = "Reset code sent to your email";
+
+
+    public static final String PASSWORD_UPDATED_SUCCESSFULLY = "Password updated successfully";
+    public static final String OFFICER_REGISTERED_SUCCESSFULLY = "Officer registered successfully";
+    public static final String MD_REGISTERED_SUCCESSFULLY = "Managing Director registered successfully";
+
+    public static final String OFFICER_PROFILE_FETCHED_SUCCESSFULLY = "Officer profile fetched successfully";
 
 }
 

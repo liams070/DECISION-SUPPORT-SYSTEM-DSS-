@@ -27,4 +27,28 @@ public class MDActionController {
     public BaseApiResponse<List<OfficerRegistrationResponseDTO>> getPendingOfficers() {
         return managementService.getPendingOfficers();
     }
+
+    @PreAuthorize("hasRole('MANAGING_DIRECTOR')")
+    @GetMapping("/staff")
+    public BaseApiResponse<List<OfficerRegistrationResponseDTO>> getAllStaff() {
+        return managementService.getAllStaff();
+    }
+
+    @PreAuthorize("hasRole('MANAGING_DIRECTOR')")
+    @PutMapping("/staff/{id}/enable")
+    public BaseApiResponse<?> enableStaff(@PathVariable Long id) {
+        return managementService.enableStaff(id);
+    }
+
+    @PreAuthorize("hasRole('MANAGING_DIRECTOR')")
+    @PutMapping("/staff/{id}/disable")
+    public BaseApiResponse<?> disableStaff(@PathVariable Long id) {
+        return managementService.disableStaff(id);
+    }
+
+    @PreAuthorize("hasRole('MANAGING_DIRECTOR')")
+    @DeleteMapping("/staff/{id}")
+    public BaseApiResponse<?> deleteStaff(@PathVariable Long id) {
+        return managementService.deleteStaff(id);
+    }
 }
