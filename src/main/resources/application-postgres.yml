@@ -28,6 +28,8 @@ logging:
 
 server:
   port: ${PORT:8080}
+  compression:
+    enabled: false
 
 servlet:
   multipart:
