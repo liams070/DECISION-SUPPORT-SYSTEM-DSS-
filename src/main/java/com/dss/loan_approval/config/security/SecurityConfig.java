@@ -48,6 +48,7 @@ public class SecurityConfig {
         configuration.setAllowedOrigins(Arrays.asList(
                 "https://goldvatechnologies.com",
                 "https://www.goldvatechnologies.com",
+                "https://api.goldvatechnologies.com",
                 "https://edss-golva.vercel.app",
                 "https://decision-support-system-dss-production.up.railway.app",
                 "http://localhost:3000",

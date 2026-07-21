@@ -1,6 +1,8 @@
 package com.dss.loan_approval.modules.account.service;
 
 import java.security.SecureRandom;
+import java.util.NoSuchElementException;
+
 import com.dss.loan_approval.config.enums.LogAction;
 import com.dss.loan_approval.config.enums.OfficerRole;
 import com.dss.loan_approval.config.enums.OfficerVerificationStatus;
@@ -106,11 +108,10 @@ public class AuthService {
         }
     }
 
-
     public BaseApiResponse<LoginResponseDTO> loginOfficer(String email, String password) {
         try {
             OfficerRegistration officer = officerRepository.findByEmail(email)
-                    .orElseThrow(() -> new RuntimeException(OFFICER_NOT_FOUND));
+                    .orElseThrow(() -> new NoSuchElementException(OFFICER_NOT_FOUND));
 
             if (officer.getStatus() != OfficerVerificationStatus.VERIFIED) {
                 return new BaseApiResponse<>(UNAUTHORIZED_CODE, UNAUTHORIZED_MSG, OFFICER_NOT_VERIFIED, null);
@@ -133,11 +134,14 @@ public class AuthService {
 
             return new BaseApiResponse<>(SUCCESS_CODE, SUCCESS_MSG, LOGIN_SUCCESSFUL, response);
 
+        } catch (NoSuchElementException e) {
+            return new BaseApiResponse<>(NOT_FOUND_CODE, NOT_FOUND_MSG, e.getMessage(), null);
         } catch (Exception e) {
             log.error(ERROR_LOGGING_IN, e);
             return new BaseApiResponse<>(SERVER_ERROR_CODE, SERVER_ERROR_MSG, FAILED_TO_LOGIN, null);
         }
     }
+
 
     public BaseApiResponse<String> logoutOfficer(String email) {
         auditService.logAction(LogAction.LOGOUT, email, LOGOUT_SUCCESSFULLY);
