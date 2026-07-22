@@ -3,7 +3,9 @@ package com.dss.loan_approval.modules.account.service;
 import com.dss.loan_approval.config.util.BaseApiResponse;
 import com.dss.loan_approval.modules.account.dto.request.LoanApplicationRequestDTO;
 import com.dss.loan_approval.modules.account.dto.response.LoanApplicationResponseDTO;
+import com.dss.loan_approval.modules.model.entity.CustomerProfile;
 import com.dss.loan_approval.modules.model.entity.LoanApplication;
+import com.dss.loan_approval.modules.model.repository.CustomerProfileRepository;
 import com.dss.loan_approval.modules.model.repository.LoanApplicationRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,10 +22,16 @@ import static com.dss.loan_approval.config.util.AppTextConstants.*;
 @RequiredArgsConstructor
 public class LoanApplicationService {
     private final LoanApplicationRepository loanApplicationRepository;
+    private final CustomerProfileRepository customerProfileRepository;
+
 
     public BaseApiResponse <Void> submitLoanApplication(LoanApplicationRequestDTO dto) {
         try {
+            CustomerProfile customer = customerProfileRepository.findById(dto.getCustomerId())
+                    .orElseThrow(() -> new RuntimeException(CUSTOMER_NOTFOUND));
+
             LoanApplication application = LoanApplication.builder()
+                    .customerProfile(customer)
                     .runningLoan(dto.getRunningLoan())
                     .newRequest(dto.getNewRequest())
                     .currentLoanBalance(dto.getCurrentLoanBalance())

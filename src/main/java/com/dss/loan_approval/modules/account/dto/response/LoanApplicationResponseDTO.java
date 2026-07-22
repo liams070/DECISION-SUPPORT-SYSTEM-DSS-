@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class LoanApplicationResponseDTO {
     private Long id;
+    private Long customerId;
     private Double runningLoan;
     private Double currentLoanBalance;
     private Double newRequest;

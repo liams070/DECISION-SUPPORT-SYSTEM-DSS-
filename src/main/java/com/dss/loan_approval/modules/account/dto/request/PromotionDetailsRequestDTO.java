@@ -12,6 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PromotionDetailsRequestDTO {
+    private Long customerId;
     private String ministry;
     private String state;
     private String lastPromotionDate;

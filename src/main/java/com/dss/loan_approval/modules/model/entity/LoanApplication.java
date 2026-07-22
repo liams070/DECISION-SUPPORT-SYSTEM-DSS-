@@ -23,7 +23,8 @@ public class LoanApplication {
     private Double monthlyGross;
     private String passportPhotoUrl;
 
+
     @ManyToOne
-    @JoinColumn(name = "customer_id")
-    private CustomerProfile customer;
+    @JoinColumn(name = "customer_id", nullable = false)
+    private CustomerProfile customerProfile;
 }

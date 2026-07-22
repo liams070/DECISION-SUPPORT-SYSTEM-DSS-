@@ -179,6 +179,14 @@ public class AppTextConstants {
 
     public static final String PROFILE_FORWARDED_TO_MD_SUCCESSFULLY = "Profile forwarded to md successfully";
     public static final String CREDIT_ADMIN_COMMENT_MUST_BE_SUBMITTED_BEFORE_FORWARDING_TO_MD = "Credit Admin comment must be submitted before forwarding to MD";
+    public static final String PROFILE_ALREADY_FORWARDED_TO_COMPLIANCE = "Customer profile already forwarded to Compliance. Verification not allowed.";
+
+    public static final String CUSTOMER_NOTFOUND = "Customer profile not found.";
+
+//    public static final String PROFILE_ALREADY_FORWARDED_TO_CREDIT_ADMIN = "Customer profile already forwarded to Credit Admin. Verification not allowed.";
+//    public static final String PROFILE_ALREADY_FORWARDED_TO_MD = "Customer profile already forwarded to MD. Verification not allowed.";
+//    public static final String CUSTOMER_MUST_BE_IN_SUBMITTED_STATE = "Customer must be in SUBMITTED state before verification comment can be added.";
+
 }
 
 

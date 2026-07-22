@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class EmploymentDetailsRequestDTO {
+    private Long customerId;
     private String officeName;
     private String officeAddressEmployment;
     private String yearOfEmployment;

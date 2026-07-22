@@ -13,6 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 public class PromotionDetailsResponseDTO {
     private Long id;
+    private Long customerId;
     private String ministry;
     private String state;
     private String lastPromotionDate;

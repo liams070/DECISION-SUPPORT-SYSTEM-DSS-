@@ -3,7 +3,9 @@ package com.dss.loan_approval.modules.account.service;
 import com.dss.loan_approval.config.util.BaseApiResponse;
 import com.dss.loan_approval.modules.account.dto.request.EmploymentDetailsRequestDTO;
 import com.dss.loan_approval.modules.account.dto.response.EmploymentDetailsResponseDTO;
+import com.dss.loan_approval.modules.model.entity.CustomerProfile;
 import com.dss.loan_approval.modules.model.entity.EmploymentDetails;
+import com.dss.loan_approval.modules.model.repository.CustomerProfileRepository;
 import com.dss.loan_approval.modules.model.repository.EmploymentDetailsRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,10 +22,15 @@ import static com.dss.loan_approval.config.util.AppTextConstants.*;
 @RequiredArgsConstructor
 public class EmploymentDetailsService {
     private final EmploymentDetailsRepository employmentDetailsRepository;
+    private final CustomerProfileRepository customerProfileRepository;
 
     public BaseApiResponse<Void> submitEmploymentDetails(EmploymentDetailsRequestDTO dto) {
         try {
+            CustomerProfile customer = customerProfileRepository.findById(dto.getCustomerId())
+                    .orElseThrow(() -> new RuntimeException(CUSTOMER_NOTFOUND));
+
             EmploymentDetails details = EmploymentDetails.builder()
+                    .customerProfile(customer)
                     .officeName(dto.getOfficeName())
                     .officeAddressEmployment(dto.getOfficeAddressEmployment())
                     .yearOfEmployment(dto.getYearOfEmployment())

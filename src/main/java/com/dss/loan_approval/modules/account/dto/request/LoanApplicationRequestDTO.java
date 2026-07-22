@@ -13,6 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class LoanApplicationRequestDTO {
+    private Long customerId;
     private Double runningLoan;
     private Double newRequest;
     private Double currentLoanBalance;

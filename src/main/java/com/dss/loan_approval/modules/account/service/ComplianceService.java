@@ -39,6 +39,7 @@ public class ComplianceService {
                     .orElseThrow(() -> new RuntimeException(PROFILE_NOT_FOUND));
 
             boolean hasVerification = verificationCommentRepository.existsByCustomerProfile(customer);
+
             if (!hasVerification) {
                 return new BaseApiResponse<>(UNAUTHORIZED_CODE, UNAUTHORIZED_MSG, VERIFICATION_COMMENT_MUST_BE_SUBMITTED, null);
             }

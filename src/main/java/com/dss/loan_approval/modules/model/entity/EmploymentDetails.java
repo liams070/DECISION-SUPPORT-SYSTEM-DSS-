@@ -22,7 +22,8 @@ public class EmploymentDetails {
     private String yearOfEmployment;
     private String employmentLetterUrl;
 
-    @OneToOne
-    @JoinColumn(name = "customer_id")
-    private CustomerProfile customer;
+
+    @ManyToOne
+    @JoinColumn(name = "customer_id", nullable = false)
+    private CustomerProfile customerProfile;
 }

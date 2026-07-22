@@ -42,7 +42,7 @@ public class CustomerProfileService {
                     .nin(dto.getNin())
                     .idType(dto.getIdType())
                     .passportPhotoUrl(dto.getPassportPhotoUrl())
-                    .status(CustomerStatus.NEW)
+                    .status(CustomerStatus.SUBMITTED)
                     .build();
 
             customerProfileRepository.save(profile);

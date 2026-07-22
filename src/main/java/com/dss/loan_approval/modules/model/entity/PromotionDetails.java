@@ -20,6 +20,7 @@ public class PromotionDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+
     private String ministry;
     private String state;
     private String lastPromotionDate;
@@ -30,8 +31,7 @@ public class PromotionDetails {
     @Column(columnDefinition = "TEXT")
     private List<String> payslipUrls;
 
-
-    @OneToOne
-    @JoinColumn(name = "customer_id")
-    private CustomerProfile customer;
+    @ManyToOne
+    @JoinColumn(name = "customer_id", nullable = false)
+    private CustomerProfile customerProfile;
 }
