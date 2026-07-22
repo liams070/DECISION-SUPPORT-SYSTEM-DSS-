@@ -32,4 +32,9 @@ public class ComplianceController {
     public BaseApiResponse getProfileWithComments(@PathVariable Long customerId) {
         return complianceService.getCustomerProfileWithComments(customerId);
     }
+
+    @PostMapping("/forward/{customerId}")
+    public BaseApiResponse forwardToCreditAdmin(@PathVariable Long customerId){
+        return complianceService.forwardToCreditAdmin(customerId);
+    }
 }

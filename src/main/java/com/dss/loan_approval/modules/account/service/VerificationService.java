@@ -34,6 +34,10 @@ public class VerificationService {
             CustomerProfile customer = customerProfileRepository.findById(dto.getCustomerId())
                     .orElseThrow(() -> new RuntimeException(PROFILE_NOTFOUND));
 
+            if (customer.getStatus() != CustomerStatus.SUBMITTED) {
+                return new BaseApiResponse<>(UNAUTHORIZED_CODE, UNAUTHORIZED_MSG, CUSTOMER_MUST_BE_IN_SUBMITTED_STATE, null);
+            }
+
             VerificationComment comment = VerificationComment.builder()
                     .customerProfile(customer)
                     .recommendedLoanAmount(dto.getRecommendedLoanAmount())
@@ -63,8 +67,8 @@ public class VerificationService {
             log.error(ERROR_SUBMITTING_COMMENT, e);
             return new BaseApiResponse<>(SERVER_ERROR_CODE, SERVER_ERROR_MSG, FAILED_TO_SUBMIT_COMMENT, null);
         }
-
     }
+
 
     public BaseApiResponse forwardToCompliance(Long customerId) {
         try {

@@ -10,4 +10,8 @@ import java.util.List;
 @Repository
 public interface ComplianceCommentRepository extends JpaRepository<ComplianceComment,Long> {
     List<ComplianceComment> findByCustomerProfile(CustomerProfile customerProfile);
+
+    boolean existsByCustomerProfile(CustomerProfile customer);
+
+    boolean existsByCustomerProfileId(Long customerId);
 }

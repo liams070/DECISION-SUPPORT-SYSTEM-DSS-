@@ -24,4 +24,9 @@ public class CreditAdminController {
     public BaseApiResponse<List<CreditAdminResponseDTO>> getComments(@PathVariable Long customerId) {
         return creditAdminService.getComments(customerId);
     }
+
+    @PostMapping("/forward/{customerId}")
+    public BaseApiResponse forwardToMD(@PathVariable Long customerId){
+        return creditAdminService.forwardToMD(customerId);
+    }
 }

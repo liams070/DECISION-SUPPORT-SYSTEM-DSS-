@@ -8,4 +8,6 @@ import java.util.List;
 
 public interface CreditAdminRepository extends JpaRepository<CreditAdminComment, Long> {
     List<CreditAdminComment> findByCustomerId(Long customerId);
+
+    boolean existsByCustomerId(Long customerId);
 }

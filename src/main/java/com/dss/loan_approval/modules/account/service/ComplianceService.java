@@ -38,6 +38,10 @@ public class ComplianceService {
             CustomerProfile customer = customerProfileRepository.findById(dto.getCustomerId())
                     .orElseThrow(() -> new RuntimeException(PROFILE_NOT_FOUND));
 
+            boolean hasVerification = verificationCommentRepository.existsByCustomerProfile(customer);
+            if (!hasVerification) {
+                return new BaseApiResponse<>(UNAUTHORIZED_CODE, UNAUTHORIZED_MSG, VERIFICATION_COMMENT_MUST_BE_SUBMITTED, null);
+            }
             ComplianceComment comment = ComplianceComment.builder()
                     .customerProfile(customer)
                     .recommendedLoanAmount(dto.getRecommendedLoanAmount())
@@ -61,14 +65,75 @@ public class ComplianceService {
                     .createdAt(saved.getCreatedAt())
                     .build();
 
-            return new BaseApiResponse<>(SUCCESS_CODE, SUCCESS_MSG,COMPLIANCE_COMMENT_SUBMITTED_SUCCESSFULLY, response);
+            return new BaseApiResponse<>(SUCCESS_CODE, SUCCESS_MSG,
+                    COMPLIANCE_COMMENT_SUBMITTED_SUCCESSFULLY, response);
 
         } catch (Exception e) {
             log.error(ERROR_SUBMITTING_COMPLIANCE_COMMENT, e);
-            return new BaseApiResponse<>(SERVER_ERROR_CODE, SERVER_ERROR_MSG, FAILED_TO_SUBMIT_COMPLIANCE_COMMENT, null);
+            return new BaseApiResponse<>(SERVER_ERROR_CODE, SERVER_ERROR_MSG,
+                    FAILED_TO_SUBMIT_COMPLIANCE_COMMENT, null);
         }
-
     }
+
+    public BaseApiResponse<Map<String, Object>> forwardToCreditAdmin(Long customerId) {
+        try {
+            CustomerProfile customer = customerProfileRepository.findById(customerId)
+                    .orElseThrow(() -> new RuntimeException(PROFILE_NOT_FOUND));
+
+            boolean hasCompliance = complianceCommentRepository.existsByCustomerProfile(customer);
+            if (!hasCompliance) {
+                return new BaseApiResponse<>(UNAUTHORIZED_CODE, UNAUTHORIZED_MSG, COMPLIANCE_COMMENT_MUST_BE_SUBMITTED_BEFORE_FORWARDEDING_TO_CREDIT_ADMIN, null);
+            }
+
+            customer.setStatus(CustomerStatus.FORWARDED_TO_CREDIT_ADMIN);
+            customerProfileRepository.save(customer);
+
+            List<VerificationComment> verificationComments =
+                    verificationCommentRepository.findByCustomerProfile(customer);
+
+            List<VerificationCommentResponseDTO> verificationResponses = verificationComments.stream()
+                    .map(c -> VerificationCommentResponseDTO.builder()
+                            .id(c.getId())
+                            .customerId(c.getCustomerProfile().getId())
+                            .recommendedLoanAmount(c.getRecommendedLoanAmount())
+                            .recommendedLoanTenor(c.getRecommendedLoanTenor())
+                            .comment(c.getComment())
+                            .officerName(c.getOfficerName())
+                            .officerRole(c.getOfficerRole())
+                            .createdAt(c.getCreatedAt())
+                            .build())
+                    .collect(Collectors.toList());
+
+            List<ComplianceComment> complianceComments =
+                    complianceCommentRepository.findByCustomerProfile(customer);
+
+            List<ComplianceCommentResponseDTO> complianceResponses = complianceComments.stream()
+                    .map(c -> ComplianceCommentResponseDTO.builder()
+                            .id(c.getId())
+                            .customerId(c.getCustomerProfile().getId())
+                            .recommendedLoanAmount(c.getRecommendedLoanAmount())
+                            .recommendedLoanTenor(c.getRecommendedLoanTenor())
+                            .comment(c.getComment())
+                            .officerName(c.getOfficerName())
+                            .officerRole(c.getOfficerRole())
+                            .createdAt(c.getCreatedAt())
+                            .build())
+                    .collect(Collectors.toList());
+
+            Map<String, Object> payload = new HashMap<>();
+            payload.put("customerProfile", customer);
+            payload.put("verificationComments", verificationResponses);
+            payload.put("complianceComments", complianceResponses);
+
+            return new BaseApiResponse<>(SUCCESS_CODE, SUCCESS_MSG, PROFILE_FORWARDED_TO_CREDIT_ADMIN_SUCCESSFULLY, payload);
+
+        } catch (Exception e) {
+            log.error(ERROR_FORWARDING_PROFILE, e);
+            return new BaseApiResponse<>(SERVER_ERROR_CODE, SERVER_ERROR_MSG,
+                    FAILED_TO_FORWARD_PROFILE, null);
+        }
+    }
+
     public BaseApiResponse approveCustomer(Long customerId) {
         try {
             CustomerProfile customer = customerProfileRepository.findById(customerId)

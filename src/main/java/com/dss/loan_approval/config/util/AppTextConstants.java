@@ -170,7 +170,15 @@ public class AppTextConstants {
     public static final String MD_REGISTERED_SUCCESSFULLY = "Managing Director registered successfully";
 
     public static final String OFFICER_PROFILE_FETCHED_SUCCESSFULLY = "Officer profile fetched successfully";
+    public static final String VERIFICATION_COMMENT_MUST_BE_SUBMITTED = "Loan office comment must be submitted before Compliance can act";
+    public static final String CUSTOMER_MUST_BE_IN_SUBMITTED_STATE = "Customer must be in SUBMITTED state before verification comment can be added";
 
+    public static final String COMPLIANCE_COMMENT_MUST_BE_SUBMITTED = "compliance office comment must be submitted before Compliance can act";
+    public static final String PROFILE_FORWARDED_TO_CREDIT_ADMIN_SUCCESSFULLY = "Profile forwarded to credit admin successfully";
+    public static final String COMPLIANCE_COMMENT_MUST_BE_SUBMITTED_BEFORE_FORWARDEDING_TO_CREDIT_ADMIN = "Compliance comment must be submitted before forwarding to Credit Admin";
+
+    public static final String PROFILE_FORWARDED_TO_MD_SUCCESSFULLY = "Profile forwarded to md successfully";
+    public static final String CREDIT_ADMIN_COMMENT_MUST_BE_SUBMITTED_BEFORE_FORWARDING_TO_MD = "Credit Admin comment must be submitted before forwarding to MD";
 }
 
 

@@ -9,4 +9,6 @@ import java.util.List;
 public interface VerificationCommentRepository extends JpaRepository<VerificationComment, Long> {
     List<VerificationComment> findByCustomerProfile(CustomerProfile customerProfile);
 
+    boolean existsByCustomerProfile(CustomerProfile customer);
+
 }
