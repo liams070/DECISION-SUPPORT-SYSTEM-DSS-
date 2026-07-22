@@ -65,13 +65,11 @@ public class ComplianceService {
                     .createdAt(saved.getCreatedAt())
                     .build();
 
-            return new BaseApiResponse<>(SUCCESS_CODE, SUCCESS_MSG,
-                    COMPLIANCE_COMMENT_SUBMITTED_SUCCESSFULLY, response);
+            return new BaseApiResponse<>(SUCCESS_CODE, SUCCESS_MSG, COMPLIANCE_COMMENT_SUBMITTED_SUCCESSFULLY, response);
 
         } catch (Exception e) {
             log.error(ERROR_SUBMITTING_COMPLIANCE_COMMENT, e);
-            return new BaseApiResponse<>(SERVER_ERROR_CODE, SERVER_ERROR_MSG,
-                    FAILED_TO_SUBMIT_COMPLIANCE_COMMENT, null);
+            return new BaseApiResponse<>(SERVER_ERROR_CODE, SERVER_ERROR_MSG, FAILED_TO_SUBMIT_COMPLIANCE_COMMENT, null);
         }
     }
 
@@ -129,8 +127,7 @@ public class ComplianceService {
 
         } catch (Exception e) {
             log.error(ERROR_FORWARDING_PROFILE, e);
-            return new BaseApiResponse<>(SERVER_ERROR_CODE, SERVER_ERROR_MSG,
-                    FAILED_TO_FORWARD_PROFILE, null);
+            return new BaseApiResponse<>(SERVER_ERROR_CODE, SERVER_ERROR_MSG, FAILED_TO_FORWARD_PROFILE, null);
         }
     }
 
