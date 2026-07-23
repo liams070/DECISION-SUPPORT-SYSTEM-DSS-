@@ -23,7 +23,7 @@ import static com.dss.loan_approval.config.util.AppTextConstants.*;
 public class CustomerProfileService {
     private final CustomerProfileRepository customerProfileRepository;
 
-    public BaseApiResponse<Void> saveProfile(CustomerProfileRequestDTO dto) {
+    public BaseApiResponse<CustomerProfileResponseDTO> saveProfile(CustomerProfileRequestDTO dto) {
         try {
             CustomerProfile profile = CustomerProfile.builder()
                     .surname(dto.getSurname())
@@ -45,9 +45,29 @@ public class CustomerProfileService {
                     .status(CustomerStatus.SUBMITTED)
                     .build();
 
-            customerProfileRepository.save(profile);
+            CustomerProfile saved = customerProfileRepository.save(profile);
 
-            return new BaseApiResponse<>(SUCCESS_CODE, SUCCESS_MSG, PROFILE_SUBMITTED_SUCCESSFULLY, null);
+            CustomerProfileResponseDTO response = CustomerProfileResponseDTO.builder()
+                    .id(saved.getId())
+                    .surname(saved.getSurname())
+                    .firstName(saved.getFirstName())
+                    .otherName(saved.getOtherName())
+                    .bvn(saved.getBvn())
+                    .ippisNumber(saved.getIppisNumber())
+                    .phoneNumber(saved.getPhoneNumber())
+                    .stateOfOrigin(saved.getStateOfOrigin())
+                    .lga(saved.getLga())
+                    .town(saved.getTown())
+                    .officeAddress(saved.getOfficeAddress())
+                    .residentialAddress(saved.getResidentialAddress())
+                    .landmark(saved.getLandmark())
+                    .dob(saved.getDob().toString())
+                    .nin(saved.getNin())
+                    .idType(saved.getIdType())
+                    .passportPhotoUrl(saved.getPassportPhotoUrl())
+                    .build();
+
+            return new BaseApiResponse<>(SUCCESS_CODE, SUCCESS_MSG, PROFILE_SUBMITTED_SUCCESSFULLY, response);
 
         } catch (Exception e) {
             log.error(ERROR_SAVING_PROFILE, e);
