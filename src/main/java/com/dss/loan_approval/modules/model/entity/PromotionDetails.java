@@ -31,6 +31,8 @@ public class PromotionDetails {
     @Column(columnDefinition = "TEXT")
     private List<String> payslipUrls;
 
+
+
     @ManyToOne
     @JoinColumn(name = "customer_id", nullable = false)
     private CustomerProfile customerProfile;

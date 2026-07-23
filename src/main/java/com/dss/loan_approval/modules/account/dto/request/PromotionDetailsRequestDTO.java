@@ -1,5 +1,6 @@
 package com.dss.loan_approval.modules.account.dto.request;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
