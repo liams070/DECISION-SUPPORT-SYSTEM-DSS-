@@ -1,5 +1,6 @@
 package com.dss.loan_approval.modules.account.dto.response;
 
+import com.dss.loan_approval.config.enums.CustomerStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -26,6 +27,6 @@ public class CustomerProfileResponseDTO {
     private String dob;
     private String nin;
     private String idType;
-
+    private CustomerStatus status;
     private String passportPhotoUrl;
 }

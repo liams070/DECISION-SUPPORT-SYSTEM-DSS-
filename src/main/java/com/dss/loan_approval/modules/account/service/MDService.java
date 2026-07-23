@@ -5,14 +5,12 @@ import com.dss.loan_approval.config.enums.OfficerRole;
 import com.dss.loan_approval.config.util.BaseApiResponse;
 import com.dss.loan_approval.modules.account.dto.request.MDCommentRequestDTO;
 import com.dss.loan_approval.modules.account.dto.response.ComplianceCommentResponseDTO;
+import com.dss.loan_approval.modules.account.dto.response.CreditAdminResponseDTO;
 import com.dss.loan_approval.modules.account.dto.response.MDCommentResponseDTO;
 import com.dss.loan_approval.modules.account.dto.response.VerificationCommentResponseDTO;
 import com.dss.loan_approval.modules.model.entity.CustomerProfile;
 import com.dss.loan_approval.modules.model.entity.MDComment;
-import com.dss.loan_approval.modules.model.repository.ComplianceCommentRepository;
-import com.dss.loan_approval.modules.model.repository.CustomerProfileRepository;
-import com.dss.loan_approval.modules.model.repository.MDCommentRepository;
-import com.dss.loan_approval.modules.model.repository.VerificationCommentRepository;
+import com.dss.loan_approval.modules.model.repository.*;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -34,6 +32,7 @@ public class MDService {
     private final CustomerProfileRepository customerProfileRepository;
     private final VerificationCommentRepository verificationCommentRepository;
     private final ComplianceCommentRepository complianceCommentRepository;
+    private final CreditAdminRepository creditAdminRepository;
 
     public BaseApiResponse<MDCommentResponseDTO> submitMDComment(MDCommentRequestDTO dto) {
         try {
@@ -101,7 +100,6 @@ public class MDService {
             return new BaseApiResponse<>(SERVER_ERROR_CODE, SERVER_ERROR_MSG,FAILED_TO_DECLINE_MD, null);
         }
     }
-
     public BaseApiResponse<Map<String, Object>> getCustomerProfileWithComments(Long customerId) {
         try {
             CustomerProfile customer = customerProfileRepository.findById(customerId)
@@ -149,18 +147,32 @@ public class MDService {
                                     .build())
                             .collect(Collectors.toList());
 
+            List<CreditAdminResponseDTO> creditAdminResponses =
+                    creditAdminRepository.findByCustomerId(customer.getId()).stream()
+                            .map(c -> CreditAdminResponseDTO.builder()
+                                    .id(c.getId())
+                                    .customerId(c.getCustomerId())
+                                    .recommendedLoanAmount(c.getRecommendedLoanAmount())
+                                    .recommendedLoanTenor(c.getRecommendedLoanTenor())
+                                    .comment(c.getComment())
+                                    .officerName(c.getOfficerName())
+                                    .officerRole(c.getOfficerRole())
+                                    .createdAt(c.getCreatedAt())
+                                    .build())
+                            .collect(Collectors.toList());
+
             Map<String, Object> payload = new HashMap<>();
             payload.put("customerProfile", customer);
             payload.put("verificationComments", verificationResponses);
             payload.put("complianceComments", complianceResponses);
             payload.put("mdComments", mdResponses);
+            payload.put("creditAdminComments", creditAdminResponses);
 
-            return new BaseApiResponse<>(SUCCESS_CODE, SUCCESS_MSG,DATA_FETCHED_SUCCESSFULLY, payload);
+            return new BaseApiResponse<>(SUCCESS_CODE, SUCCESS_MSG, DATA_FETCHED_SUCCESSFULLY, payload);
 
         } catch (Exception e) {
             log.error(ERROR_FETCHING_DATA, e);
-            return new BaseApiResponse<>(SERVER_ERROR_CODE, SERVER_ERROR_MSG,FAILED_TO_FETCH_DATA, null);
+            return new BaseApiResponse<>(SERVER_ERROR_CODE, SERVER_ERROR_MSG, FAILED_TO_FETCH_DATA, null);
         }
-
     }
 }

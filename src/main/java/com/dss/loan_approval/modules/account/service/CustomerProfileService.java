@@ -64,6 +64,7 @@ public class CustomerProfileService {
                     .dob(saved.getDob().toString())
                     .nin(saved.getNin())
                     .idType(saved.getIdType())
+                    .status(profile.getStatus())
                     .passportPhotoUrl(saved.getPassportPhotoUrl())
                     .build();
 
@@ -98,6 +99,7 @@ public class CustomerProfileService {
                     .dob(profile.getDob().toString())
                     .nin(profile.getNin())
                     .idType(profile.getIdType())
+                    .status(profile.getStatus())
                     .passportPhotoUrl(profile.getPassportPhotoUrl())
                     .build();
 
@@ -131,6 +133,7 @@ public class CustomerProfileService {
                             .dob(profile.getDob().toString())
                             .nin(profile.getNin())
                             .idType(profile.getIdType())
+                            .status(profile.getStatus())
                             .passportPhotoUrl(profile.getPassportPhotoUrl())
                             .build())
                     .collect(Collectors.toList());

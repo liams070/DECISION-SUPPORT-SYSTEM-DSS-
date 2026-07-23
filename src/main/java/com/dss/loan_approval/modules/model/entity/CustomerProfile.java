@@ -24,7 +24,7 @@ public class CustomerProfile {
     private String firstName;
 
     @Column(name = "other_name")
-    private String otherName;
+    private String otherName;   
     private String bvn;
     @Column(name = "ippis_number")
     private String ippisNumber;
