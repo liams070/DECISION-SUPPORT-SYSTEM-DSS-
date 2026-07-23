@@ -19,20 +19,15 @@ public class CustomerProfile {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String surname;
-
     @Column(name = "first_name")
     private String firstName;
 
     @Column(name = "other_name")
     private String otherName;
-
     private String bvn;
-
     @Column(name = "ippis_number")
     private String ippisNumber;
-
     @Column(name = "phone_number")
     private String phoneNumber;
 
